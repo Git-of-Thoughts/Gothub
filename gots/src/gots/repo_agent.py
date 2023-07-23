@@ -30,11 +30,6 @@ from .tools.scoped_file_tools import build_scoped_file_tools
 # keep this true if you want to see the outputs
 langchain.debug = True
 
-filepath = "/prompts/pretrain.txt"
-
-with open(filepath, "r") as file:
-    content = file.read()
-
 
 class WriteRepoInp(BaseModel):
     repo: Repo
