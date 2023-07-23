@@ -11,3 +11,5 @@ RUN sh /app/scripts/install.sh
 RUN useradd -m myuser
 USER myuser
 CMD ["python", "gothub_server/src/manage.py", "runserver", "0.0.0.0:8000"]
+
+#LOGIC: user paste link to their own very formatted scripts. Import scripts here and overwrite in here. Then...run `take_order` directly?
