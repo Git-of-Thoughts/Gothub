@@ -81,7 +81,7 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
 
         {tools}
 
-        Use the following format:
+        Use Strctly the following format:
 
         Question: the input question you must answer
         Thought: you should always think about what to do
@@ -92,8 +92,9 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
         Thought: I now know the final answer
         Final Answer: the final answer to the original input question
 
-        Begin! Remember to include commit message
+        Begin! Remember to include git commit message
         when you make a major step in the generation process.
+        And Make sure your follow the format provided at every step.
 
         Question: {input}
         {agent_scratchpad}"""
