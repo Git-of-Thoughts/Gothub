@@ -22,11 +22,11 @@ class GitCallbackHandler(BaseCallbackHandler):
     ) -> Any:
         """Run when tool starts running."""
 
-    def on_llm_start(self, **kwargs: Any) -> Any:
+    def on_llm_start(self) -> Any:
         self.repo.git.add(A=True)  # This will add all files to the staging area
         self.repo.git.commit("-m", "on llm start", "--allow-empty")
 
-    def on_llm_end(self, **kwargs: Any) -> Any:
+    def on_llm_end(self) -> Any:
         self.repo.git.add(A=True)  # This will add all files to the staging area
         self.repo.git.commit("-m", "on llm end", "--allow-empty")
 
