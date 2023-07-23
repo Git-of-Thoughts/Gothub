@@ -22,13 +22,23 @@ class GitCallbackHandler(BaseCallbackHandler):
     ) -> Any:
         """Run when tool starts running."""
 
-    def on_llm_start(self) -> Any:
+    def on_llm_start(self, *args, **kwargs) -> Any:
+        run_id = kwargs.get("run_id")
         self.repo.git.add(A=True)  # This will add all files to the staging area
-        self.repo.git.commit("-m", "on llm start", "--allow-empty")
+        if run_id:
+            commit_message = f"on llm end, run_id: {run_id}"
+        else:
+            commit_message = "on llm end"
+        self.repo.git.commit("-m", commit_message, "--allow-empty")
 
-    def on_llm_end(self) -> Any:
+    def on_llm_end(self, *args, **kwargs) -> Any:
+        run_id = kwargs.get("run_id")
         self.repo.git.add(A=True)  # This will add all files to the staging area
-        self.repo.git.commit("-m", "on llm end", "--allow-empty")
+        if run_id:
+            commit_message = f"on llm end, run_id: {run_id}"
+        else:
+            commit_message = "on llm end"
+        self.repo.git.commit("-m", commit_message, "--allow-empty")
 
     def on_chain_end(
         self,
