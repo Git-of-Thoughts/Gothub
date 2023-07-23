@@ -30,7 +30,7 @@ from .tools.scoped_file_tools import build_scoped_file_tools
 # keep this true if you want to see the outputs
 langchain.debug = True
 
-filepath = "/Users/wayne/Desktop/Goth Repos/Gothub/gots/src/gots/prompts/pretrain.txt"
+filepath = "/prompts/pretrain.txt"
 
 with open(filepath, "r") as file:
     content = file.read()
@@ -95,7 +95,6 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
         Begin! Remember to include git commit message
         when you make a major step in the generation process.
         And Make sure your follow the format provided at every step.
-        Do not skip anything in the format always fill them in.
 
         Question: {input}
         {agent_scratchpad}"""
