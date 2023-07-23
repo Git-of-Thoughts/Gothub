@@ -95,8 +95,7 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
         Begin! Remember to include git commit message
         when you make a major step in the generation process.
         And Make sure your follow the format provided at every step.
-        Do not skip anything in the format, if you have nothing
-        to fill for some of them, fill in N/A.
+        Do not skip anything in the format always fill them in.
 
         Question: {input}
         {agent_scratchpad}"""
