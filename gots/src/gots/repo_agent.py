@@ -25,7 +25,7 @@ class WriteRepoInp(BaseModel):
     repo: Repo
     openai_api_key: str
     extra_prompt: Optional[str]
-    tools_selected: Dict[str, bool]
+    tools_selected: Optional[Dict[str, bool]]
 
     class Config:
         arbitrary_types_allowed = True
@@ -61,9 +61,12 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
         ):
             pass
 
-    tools_dict = build_scoped_file_tools(repo.working_dir)
+    if tools_selected:
+        tools_dict = build_scoped_file_tools(repo.working_dir)
 
-    tools = get_selected_tools(tools_selected, tools_dict)
+        tools = get_selected_tools(tools_selected, tools_dict)
+    else:
+        tools = list(build_scoped_file_tools(repo.working_dir).values())
 
     llm = ChatOpenAI(
         temperature=0,
