@@ -61,7 +61,6 @@ def one_branch_mrkl(inp: WriteRepoInp) -> None:
 
     tools = build_scoped_file_tools(repo.working_dir)
 
-    # Set up the base template
     template = """You are a smart software developer.
         You are working on a project that requires you to understand in
         depth the design and use of this project.
