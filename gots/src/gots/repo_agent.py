@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Callable, List, Optional
+from typing import Callable, Dict, List, Optional
 
 import langchain
 from git import Head, Repo
@@ -25,6 +25,7 @@ class WriteRepoInp(BaseModel):
     repo: Repo
     openai_api_key: str
     extra_prompt: Optional[str]
+    tools_selected: Dict[str, bool]
 
     class Config:
         arbitrary_types_allowed = True
@@ -40,16 +41,29 @@ class WriteRepoOut(BaseModel):
 RepoAgent = Callable[[WriteRepoInp], WriteRepoOut]
 
 
+def get_selected_tools(
+    tool_selection: Dict[str, bool], tools: Dict[str, Tool]
+) -> List[Tool]:
+    return [
+        tools[tool_name]
+        for tool_name, is_selected in tool_selection.items()
+        if is_selected
+    ]
+
+
 def one_branch_mrkl(inp: WriteRepoInp) -> None:
     match inp:
         case WriteRepoInp(
             repo=repo,
             openai_api_key=openai_api_key,
             extra_prompt=extra_prompt,
+            tools_selected=tools_selected,
         ):
             pass
 
-    tools = build_scoped_file_tools(repo.working_dir)
+    tools_dict = build_scoped_file_tools(repo.working_dir)
+
+    tools = get_selected_tools(tools_selected, tools_dict)
 
     llm = ChatOpenAI(
         temperature=0,

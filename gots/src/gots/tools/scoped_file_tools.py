@@ -1,3 +1,5 @@
+from typing import Dict
+
 from langchain.agents import Tool
 from langchain.tools.file_management import (
     CopyFileTool,
@@ -14,7 +16,7 @@ from .scoped_file_tools_funcs import (
 )
 
 
-def build_scoped_file_tools(root_dir: str) -> list[Tool]:
+def build_scoped_file_tools(root_dir: str) -> Dict[str, Tool]:
     MyCreateFileTool, MyFillFileTool = file_tool_factory()
     MyReadLineTool, MyLocateLineTool, MyEditLineTool = edit_file_tool_factory()
 
@@ -122,13 +124,13 @@ For example, if you want to test a script "test_script.py",
 under the directory "test", you should enter "test/test_script.py".
 """,
     )
-    return [
-        read_one_file_tool,
-        read_directory_tree_tool,
-        create_file_tool,
-        fill_file_tool,
-        # read_line_tool,
-        # locate_line_tool,
-        # edit_line_tool,
-        # test_execution_tool,
-    ]
+    return {
+        read_one_file_tool.name: read_one_file_tool,
+        read_directory_tree_tool.name: read_directory_tree_tool,
+        create_file_tool.name: create_file_tool,
+        fill_file_tool.name: fill_file_tool,
+        # read_line_tool.name: read_line_tool,
+        # locate_line_tool.name: locate_line_tool,
+        # edit_line_tool.name: edit_line_tool,
+        # test_execution_tool.name: test_execution_tool
+    }
