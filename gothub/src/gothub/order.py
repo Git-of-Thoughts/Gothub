@@ -2,7 +2,7 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 from github import Github
 from github.Auth import Token
@@ -30,6 +30,7 @@ class GithubOrderInp:
     branch_name: Optional[str] = None
     extra_prompt: Optional[str] = None
     repo_agent: RepoAgent = gots_repo_agent
+    tools_selected: Optional[Dict[str, bool]] = None
 
 
 @dataclass
@@ -48,6 +49,7 @@ def take_order(inp: GithubOrderInp) -> GithubOrderOut:
             branch_name=branch_name,
             extra_prompt=extra_prompt,
             repo_agent=repo_agent,
+            tools_selected=tools_selected,
         ):
             pass
 
@@ -68,6 +70,7 @@ def take_order(inp: GithubOrderInp) -> GithubOrderOut:
                 repo=repo,
                 openai_api_key=openai_api_key,
                 extra_prompt=extra_prompt,
+                tools_selected=tools_selected,
             )
         )
 

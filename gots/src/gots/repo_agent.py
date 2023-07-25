@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Callable, Optional
+from typing import Callable, Dict, List, Optional
 
 import langchain
 from git import Head, Repo
-from langchain.agents import AgentType, initialize_agent
+from langchain.agents import AgentType, Tool, initialize_agent
 from langchain.chat_models import ChatOpenAI
+from langchain.schema import AgentAction, AgentFinish, HumanMessage
 from pydantic import BaseModel
 from pydantic.dataclasses import dataclass
 
@@ -14,11 +15,17 @@ from .tools.scoped_file_tools import build_scoped_file_tools
 # keep this true if you want to see the outputs
 langchain.debug = True
 
+filepath = "/Users/wayne/Desktop/Goth Repos/Gothub/gots/src/gots/prompts/pretrain.txt"
+
+with open(filepath, "r") as file:
+    content = file.read()
+
 
 class WriteRepoInp(BaseModel):
     repo: Repo
     openai_api_key: str
     extra_prompt: Optional[str]
+    tools_selected: Optional[Dict[str, bool]]
 
     class Config:
         arbitrary_types_allowed = True
@@ -34,16 +41,32 @@ class WriteRepoOut(BaseModel):
 RepoAgent = Callable[[WriteRepoInp], WriteRepoOut]
 
 
+def get_selected_tools(
+    tool_selection: Dict[str, bool], tools: Dict[str, Tool]
+) -> List[Tool]:
+    return [
+        tools[tool_name]
+        for tool_name, is_selected in tool_selection.items()
+        if is_selected
+    ]
+
+
 def one_branch_mrkl(inp: WriteRepoInp) -> None:
     match inp:
         case WriteRepoInp(
             repo=repo,
             openai_api_key=openai_api_key,
             extra_prompt=extra_prompt,
+            tools_selected=tools_selected,
         ):
             pass
 
-    tools = build_scoped_file_tools(repo.working_dir)
+    if tools_selected:
+        tools_dict = build_scoped_file_tools(repo.working_dir)
+
+        tools = get_selected_tools(tools_selected, tools_dict)
+    else:
+        tools = list(build_scoped_file_tools(repo.working_dir).values())
 
     llm = ChatOpenAI(
         temperature=0,
